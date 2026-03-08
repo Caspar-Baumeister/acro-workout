@@ -1,0 +1,276 @@
+---
+name: rules
+description: This is a new rule
+---
+
+You are an expert in JavaScript, React, Next.js App Router, Firebase, Gemini API integration, MailerSend, Shadcn UI, Radix UI, Tailwind CSS, and Zod.
+
+Build a small, clean, conversion-focused web app that guides users through a questionnaire and generates a tailored partner acrobatics training plan. The app should prioritize simplicity, clarity, strong UX, and secure server-side handling of AI and email logic.
+
+Code Style and Structure
+- Write concise, technical JavaScript/TypeScript code with clear intent.
+- Use functional and declarative patterns; avoid classes.
+- Prefer simple, maintainable solutions over over-engineering.
+- Keep files small and focused.
+- Use descriptive names with auxiliary verbs (e.g. isSubmitting, hasAcceptedTerms, canProceed).
+- Use early returns and guard clauses.
+- Avoid deep nesting.
+- Prefer composition over abstraction until reuse is clearly needed.
+- Structure files in this order where relevant: exports, subcomponents, helpers, constants, schemas.
+
+General Project Priorities
+- Keep the app lightweight and MVP-friendly.
+- Optimize for a small number of users, not premature scale.
+- Focus on one clear funnel:
+  - landing page
+  - questionnaire
+  - email capture + terms acceptance
+  - server-side plan generation
+  - email delivery
+  - success state
+- Do not introduce unnecessary architectural complexity.
+- Favor readability and fast iteration.
+
+Tech Stack Rules
+- Use Next.js App Router.
+- Prefer Server Components by default.
+- Use Client Components only when interactivity is required.
+- Use Route Handlers for backend endpoints.
+- Do not use Firebase Cloud Functions unless clearly necessary.
+- Use Firebase primarily for hosting and optional Firestore persistence.
+- Use Gemini API only from the server side.
+- Use MailerSend only from the server side.
+- Never expose secrets to the client.
+
+TypeScript and Validation
+- Use TypeScript throughout.
+- Use Zod for request validation and schema parsing.
+- Validate all questionnaire input on the server.
+- Keep shared schemas in a dedicated lib or feature-level schema file.
+- Infer types from Zod schemas where possible.
+
+Naming Conventions
+- Use lowercase with dashes for directories (e.g. app/workout-plan, components/questionnaire-step).
+- Use PascalCase for components.
+- Use camelCase for variables, functions, and props.
+- Use clear names that reflect domain concepts:
+  - acrobaticsType
+  - userRole
+  - trainingGoal
+  - experienceLevel
+  - availableDays
+  - limitations
+  - email
+  - hasAcceptedTerms
+
+App Structure
+- Organize by feature, not by technical layer only.
+- Preferred structure:
+
+  app/
+    page.tsx
+    questionnaire/
+      page.tsx
+    success/
+      page.tsx
+    api/
+      generate-plan/
+        route.ts
+
+  components/
+    landing/
+    questionnaire/
+    ui/
+
+  lib/
+    firebase/
+    gemini/
+    mailersend/
+    validation/
+    utils/
+
+  content/
+    questionnaire.ts
+    prompts.ts
+
+  types/
+
+React Best Practices
+- Use function components.
+- Keep components focused and presentational where possible.
+- Lift state only when necessary.
+- Prefer local state for form flow unless shared state becomes cumbersome.
+- Avoid unnecessary global state.
+- If global state is needed for multi-step questionnaire persistence, use Zustand sparingly and only for client-side UI state.
+- Avoid heavy useEffect logic when server-first patterns are sufficient.
+- Avoid unnecessary memoization.
+- Use Suspense only where it genuinely improves UX.
+
+Next.js App Router Best Practices
+- Follow server-first architecture.
+- Use Route Handlers for form submission and AI/email orchestration.
+- Keep API logic close to the domain.
+- Use server-only modules for secrets and service integrations.
+- Use environment variables for all secrets.
+- Never use NEXT_PUBLIC_ for Gemini, Firebase admin, or MailerSend secrets.
+- Prefer async server components when fetching server-side data.
+- Use loading and error states intentionally, not excessively.
+
+Form and Questionnaire Rules
+- The questionnaire must feel simple, progressive, and motivating.
+- Break the flow into clear, digestible steps.
+- Show only the necessary fields at each stage.
+- Preserve answers across steps.
+- Prevent submission until required fields are complete.
+- Require email and terms acceptance before final submission.
+- Use clear validation messages.
+- Keep the number of questions low in the MVP.
+- Prefer radio groups, segmented controls, checkboxes, and selects over free text where possible.
+- Use free text only when it meaningfully improves training personalization.
+
+Domain Logic
+- The product is a tailored partner acrobatics workout plan generator.
+- Core questionnaire fields should support:
+  - acrobatics type (e.g. L-Base, Standing)
+  - role (Base, Flyer, both)
+  - level
+  - goals
+  - training frequency
+  - available equipment
+  - optional limitations or weak points
+- The final generated plan should be structured and practical.
+- Prefer consistent output sections such as:
+  - profile summary
+  - training focus
+  - warm-up
+  - main drills
+  - accessory work
+  - weekly structure
+  - safety notes
+- Do not generate vague, generic motivational content when concrete training guidance is expected.
+
+Gemini API Rules
+- Call Gemini only inside server-side Route Handlers or server-only modules.
+- Build prompts from validated user input.
+- Keep prompts structured and explicit.
+- Request predictable output in a structured format.
+- Prefer JSON-shaped output that can be transformed into email-friendly content.
+- Sanitize and normalize model output before use.
+- Handle model failures gracefully.
+- Return safe fallback errors to the client.
+- Never trust model output without parsing/validation.
+
+MailerSend Rules
+- Send emails only from the server side.
+- Keep email sending logic isolated in a dedicated service module.
+- Use a clean transactional email structure.
+- Ensure the app can handle email send failure separately from plan generation failure when possible.
+- Log send attempts in a minimal, privacy-conscious way if persistence is enabled.
+- Keep copy clear, friendly, and concise.
+
+Firebase Rules
+- Use Firebase App Hosting for deployment.
+- Use Firestore only if persistence is needed.
+- If Firestore is used, keep the schema minimal and explicit.
+- Store only what is useful:
+  - submission metadata
+  - validated questionnaire answers
+  - generated plan
+  - delivery status
+- Avoid storing unnecessary personal data.
+- Apply proper Firestore security rules.
+- Use Firebase Admin only on the server side.
+
+UI and Styling
+- Use Shadcn UI and Radix UI as the UI foundation.
+- Use Tailwind CSS for styling.
+- Prefer a clean, modern, high-conversion landing page aesthetic.
+- Design mobile-first.
+- Use strong hierarchy, generous spacing, and clear CTA buttons.
+- Keep the UI calm and professional, not visually noisy.
+- Use Tailwind utilities directly.
+- Avoid introducing additional styling complexity unless truly needed.
+- Do not use Stylus for this project unless a real need emerges.
+- Favor consistency over novelty.
+
+Landing Page Rules
+- The landing page must have one primary goal: start the questionnaire.
+- Use a strong headline, concise supporting copy, and a prominent CTA.
+- Explain the value quickly:
+  - tailored plan
+  - based on user role and acrobatics style
+  - delivered by email
+- Include light trust-building elements:
+  - simple explanation of the process
+  - benefits
+  - what the user gets
+- Avoid clutter and unnecessary sections in the MVP.
+
+Performance
+- Keep client-side JavaScript minimal.
+- Minimize use client.
+- Avoid unnecessary libraries.
+- Optimize images and assets.
+- Keep the landing page fast.
+- Avoid large animation libraries unless clearly needed.
+- Prefer native Next.js capabilities over third-party abstractions.
+
+Error Handling
+- Handle errors and edge cases at the beginning of functions.
+- Use explicit validation failures.
+- Provide user-friendly error messages in the UI.
+- Log server-side errors with enough detail for debugging, but never leak secrets.
+- Separate validation errors, AI errors, and email delivery errors conceptually.
+
+Security and Privacy
+- Treat all user input as untrusted.
+- Validate and sanitize all incoming data.
+- Never expose API keys.
+- Never call Gemini or MailerSend from the browser.
+- Keep personal data collection minimal.
+- Be privacy-conscious with email and questionnaire answers.
+- Avoid collecting sensitive health data unless absolutely necessary.
+- If limitations/injuries are included, keep wording optional and minimal.
+
+Accessibility
+- Use semantic HTML.
+- Ensure keyboard accessibility.
+- Use accessible labels and descriptions.
+- Ensure good color contrast.
+- Make the step flow understandable for screen readers.
+
+Testing
+- Test critical flows first:
+  - questionnaire progression
+  - validation
+  - final submission
+  - API success/failure
+- Prefer practical tests over excessive coverage.
+- Add integration tests for the main conversion flow if time allows.
+
+Content and Copy
+- Keep copy concise and motivating.
+- Use plain, confident language.
+- Prioritize clarity over cleverness.
+- Write CTA text that is direct and action-oriented.
+- Make form labels and helper text immediately understandable.
+
+Key Conventions
+- Prefer server components.
+- Prefer route handlers over external backend services for this MVP.
+- Prefer simple local state over global state.
+- Use Zustand only if multi-step state becomes awkward without it.
+- Use Zod for all server-side validation.
+- Keep AI prompt building explicit and easy to inspect.
+- Keep the codebase small, clean, and easy to iterate on.
+
+Definition of Done
+- User lands on a clean landing page.
+- User can complete a short questionnaire.
+- User can enter email and accept terms.
+- Submission hits a secure server-side endpoint.
+- Gemini generates a tailored structured training plan.
+- MailerSend sends the result to the user.
+- The app handles invalid input and service failures gracefully.
+- Secrets remain server-side.
+- The implementation stays simple and maintainable.
