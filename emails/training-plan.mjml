@@ -1,0 +1,109 @@
+<mjml>
+  <mj-head>
+    <mj-title>Your Personalized Training Plan</mj-title>
+    <mj-preview>%PLAN_TITLE% - Your custom partner acrobatics training program</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" />
+      <mj-text font-size="14px" color="#333333" line-height="1.6" />
+      <mj-section padding="20px 0" />
+    </mj-attributes>
+    <mj-style>
+      .plan-body h3 { color: #e65100; margin-top: 24px; margin-bottom: 12px; }
+      .plan-body h4 { color: #e65100; margin-top: 16px; margin-bottom: 8px; }
+      .plan-body h5 { color: #333; margin-top: 12px; margin-bottom: 8px; }
+      .plan-body ul { margin: 0; padding-left: 20px; }
+      .plan-body li { margin-bottom: 6px; }
+      .plan-body table { width: 100%; }
+      .plan-body td { padding: 4px 8px 4px 0; }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#f4f4f4">
+    <!-- Header -->
+    <mj-section background-color="#e65100" padding="30px 20px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="28px" font-weight="bold">
+          🤸 AcroWorld
+        </mj-text>
+        <mj-text align="center" color="#ffcc80" font-size="14px" padding-top="8px">
+          Partner Acrobatics Training Plans
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Greeting -->
+    <mj-section background-color="#ffffff" padding="30px 20px 20px">
+      <mj-column>
+        <mj-text font-size="18px" color="#333333">
+          Hey %RECEIVER_NAME%! 👋
+        </mj-text>
+        <mj-text padding-top="16px">
+          Your personalized partner acrobatics training plan is ready! We've created this program specifically based on your goals and experience level.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Plan Title Card -->
+    <mj-section background-color="#ffffff" padding="0 20px 20px">
+      <mj-column>
+        <mj-text align="center" font-size="24px" font-weight="bold" color="#e65100" padding="24px 20px" background-color="#fff3e0" border-radius="12px">
+          %PLAN_TITLE%
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Summary -->
+    <mj-section background-color="#ffffff" padding="0 20px 30px">
+      <mj-column>
+        <mj-text font-size="16px" color="#666666" font-style="italic" padding="16px 20px" background-color="#f8f9fa" border-radius="8px">
+          %PLAN_SUMMARY%
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Divider -->
+    <mj-section background-color="#ffffff" padding="0 20px">
+      <mj-column>
+        <mj-divider border-color="#ffcc80" border-width="2px" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Plan Body -->
+    <mj-section background-color="#ffffff" padding="20px" css-class="plan-body">
+      <mj-column>
+        <mj-text>
+          %PLAN_BODY%
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Call to Action -->
+    <mj-section background-color="#ffffff" padding="20px 20px 40px">
+      <mj-column>
+        <mj-divider border-color="#e0e0e0" border-width="1px" padding-bottom="20px" />
+        <mj-text align="center" color="#666666" font-size="16px">
+          Ready to start your training journey? 💪
+        </mj-text>
+        <mj-text align="center" color="#888888" font-size="14px" padding-top="8px">
+          Print this plan or save it for easy reference during your sessions.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#333333" padding="30px 20px">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="16px" font-weight="bold">
+          Happy Training! 🤸
+        </mj-text>
+        <mj-text align="center" color="#999999" font-size="12px" padding-top="16px">
+          Created by AcroWorld<br />
+          Your partner acrobatics training companion
+        </mj-text>
+        <mj-text align="center" color="#666666" font-size="11px" padding-top="20px">
+          You received this email because you requested a training plan from AcroWorld.<br />
+          © 2026 AcroWorld. All rights reserved.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
