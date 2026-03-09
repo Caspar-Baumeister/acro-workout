@@ -112,6 +112,29 @@ export function EmailStep({ data, onUpdate, submitError }: Props) {
           </span>
         </label>
 
+        {/* Optional interest checkboxes */}
+        <div className="pt-2 space-y-3 border-t border-border/50">
+          <p className="text-sm font-medium text-muted-foreground">Keep me updated about (optional):</p>
+          
+          <InterestCheckbox
+            checked={data.interestedInCoaching ?? false}
+            onChange={(checked) => onUpdate({ interestedInCoaching: checked })}
+            label="Private coaching opportunities"
+          />
+          
+          <InterestCheckbox
+            checked={data.interestedInWorkshops ?? false}
+            onChange={(checked) => onUpdate({ interestedInWorkshops: checked })}
+            label="Workshops & events"
+          />
+          
+          <InterestCheckbox
+            checked={data.interestedInNewsletter ?? false}
+            onChange={(checked) => onUpdate({ interestedInNewsletter: checked })}
+            label="Tips & training newsletter"
+          />
+        </div>
+
         {/* Submit error */}
         {submitError && (
           <motion.div
@@ -135,5 +158,49 @@ export function EmailStep({ data, onUpdate, submitError }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+function InterestCheckbox({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: string;
+}) {
+  return (
+    <label className="flex items-center gap-3 cursor-pointer group">
+      <div className="relative">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="sr-only"
+        />
+        <div
+          className={cn(
+            'h-5 w-5 rounded border-2 transition-all flex items-center justify-center',
+            checked
+              ? 'bg-primary/80 border-primary/80'
+              : 'border-border group-hover:border-primary/50'
+          )}
+        >
+          {checked && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+            >
+              <Check className="h-3 w-3 text-primary-foreground" strokeWidth={3} />
+            </motion.div>
+          )}
+        </div>
+      </div>
+      <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+        {label}
+      </span>
+    </label>
   );
 }

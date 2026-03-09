@@ -20,6 +20,10 @@ export const questionnaireSchema = z.object({
   limitations: z.string().optional(),
   email: z.string().email('Please enter a valid email address'),
   acceptedTerms: z.literal(true, 'You must accept the terms to continue'),
+  // Marketing & interest fields
+  interestedInCoaching: z.boolean().optional().default(false),
+  interestedInWorkshops: z.boolean().optional().default(false),
+  interestedInNewsletter: z.boolean().optional().default(false),
 });
 
 export const generatePlanRequestSchema = z.object({
