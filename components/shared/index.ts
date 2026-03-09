@@ -7,3 +7,4 @@ export {
   SlideTransition,
   ScaleIn,
 } from './animated-container';
+export { ImagePlaceholder, HeroImagePlaceholder } from './image-placeholder';

@@ -2,13 +2,17 @@
 
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Play } from 'lucide-react';
+import { HeroImagePlaceholder } from '@/components/shared/image-placeholder';
 
 export function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden px-4 py-20">
-      {/* Animated background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+    <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden px-4 py-20">
+      {/* Hero background image placeholder */}
+      <HeroImagePlaceholder />
+
+      {/* Alternative animated background (shows through placeholder) */}
+      <div className="pointer-events-none absolute inset-0 -z-20">
         {/* Main gradient orbs */}
         <motion.div
           className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-brand-peach via-brand-coral/30 to-transparent blur-3xl opacity-60"
@@ -52,7 +56,7 @@ export function Hero() {
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-coral/30 bg-white/80 px-4 py-2 text-sm font-medium text-brand-navy shadow-lg shadow-brand-coral/5 backdrop-blur-sm"
         >
           <Sparkles className="h-4 w-4 text-brand-orange" />
-          <span>AI-powered personalized training</span>
+          <span>AI-powered supplemental training for acrobats</span>
         </motion.div>
 
         {/* Main headline */}
@@ -62,9 +66,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl text-balance"
         >
-          Your personalized{' '}
+          Build the strength{' '}
           <span className="relative inline-block">
-            <span className="gradient-text">partner acrobatics</span>
+            <span className="gradient-text">acro reveals</span>
             <motion.span
               className="absolute -bottom-2 left-0 right-0 h-3 bg-brand-peach/50 -z-10 rounded-full"
               initial={{ scaleX: 0 }}
@@ -73,18 +77,19 @@ export function Hero() {
               style={{ originX: 0 }}
             />
           </span>{' '}
-          training plan
+          you need
         </motion.h1>
 
-        {/* Subheadline */}
+        {/* Subheadline - more story-driven */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-6 text-lg text-muted-foreground sm:text-xl md:text-2xl max-w-2xl mx-auto text-balance"
+          className="mt-6 text-lg text-muted-foreground sm:text-xl md:text-2xl max-w-3xl mx-auto text-balance leading-relaxed"
         >
-          Answer a few questions. Get a structured workout plan tailored to your role, 
-          level, and goals — delivered straight to your inbox.
+          Acro shows your weaknesses. It doesn&apos;t fix them. Get a personalized 
+          strength, mobility &amp; prehab plan designed for your role and goals—so you 
+          can progress faster and stay injury-free.
         </motion.p>
 
         {/* CTA */}
@@ -101,12 +106,25 @@ export function Hero() {
             Create My Plan
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
-          <p className="text-sm text-muted-foreground">
-            Free • Takes 2 minutes • No account needed
-          </p>
+          <Link
+            href="#philosophy"
+            className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-brand-navy/20 bg-white/80 px-6 text-brand-navy font-medium backdrop-blur-sm transition-all hover:bg-white hover:border-brand-navy/30"
+          >
+            <Play className="h-4 w-4" />
+            Learn our approach
+          </Link>
         </motion.div>
 
-        {/* Trust indicators */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-4 text-sm text-muted-foreground"
+        >
+          Free • Takes 2 minutes • No account needed
+        </motion.p>
+
+        {/* Trust indicators - more personal */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -114,8 +132,9 @@ export function Hero() {
           className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
         >
           {[
-            { icon: '🎯', text: 'Personalized to your level' },
-            { icon: '🤸', text: 'Base, Flyer, or Both' },
+            { icon: '🎯', text: 'Base, Flyer, or Both' },
+            { icon: '💪', text: 'Strength + Mobility + Prehab' },
+            { icon: '🛡️', text: 'Injury prevention focus' },
             { icon: '✉️', text: 'Delivered by email' },
           ].map((item, i) => (
             <motion.div
@@ -144,7 +163,7 @@ export function Hero() {
           transition={{ duration: 2, repeat: Infinity }}
           className="flex flex-col items-center gap-2 text-muted-foreground/50"
         >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
+          <span className="text-xs uppercase tracking-widest">Discover</span>
           <div className="h-8 w-5 rounded-full border-2 border-current p-1">
             <motion.div
               animate={{ y: [0, 8, 0] }}
