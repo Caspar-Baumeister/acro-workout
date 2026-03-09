@@ -10,9 +10,9 @@ import {
   AcrobaticsTypeStep,
   RoleStep,
   LevelStep,
-  GoalsStep,
+  AcroStyleStep,
   ScheduleStep,
-  EquipmentStep,
+  SetupStep,
   LimitationsStep,
   EmailStep,
 } from './steps';
@@ -75,11 +75,11 @@ export function QuestionnaireFlow() {
       case 2:
         return <LevelStep {...props} />;
       case 3:
-        return <GoalsStep {...props} />;
+        return <AcroStyleStep {...props} />;
       case 4:
         return <ScheduleStep {...props} />;
       case 5:
-        return <EquipmentStep {...props} />;
+        return <SetupStep {...props} />;
       case 6:
         return <LimitationsStep {...props} />;
       case 7:

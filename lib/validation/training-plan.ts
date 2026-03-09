@@ -34,10 +34,10 @@ export const weekPlanSchema = z.object({
 export const profileSchema = z.object({
   role: z.string(),
   acrobaticsType: z.string(),
+  acroStyleFocus: z.union([z.string(), z.array(z.string())]), // Can be string or array from Gemini
   level: z.string(),
-  goals: z.array(z.string()),
   trainingDays: z.number(),
-  equipment: z.array(z.string()),
+  setup: z.string(),
   limitations: z.string().nullish(),
 });
 

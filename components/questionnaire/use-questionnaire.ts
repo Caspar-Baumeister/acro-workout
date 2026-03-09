@@ -19,9 +19,10 @@ const initialData: PartialQuestionnaire = {
   acrobaticsType: undefined,
   role: undefined,
   level: undefined,
-  goals: [],
+  acroStyleFocus: [],
   trainingDays: undefined,
-  equipment: [],
+  setupPreset: undefined,
+  setupNotes: '',
   limitations: '',
   email: '',
   acceptedTerms: undefined,
@@ -71,21 +72,21 @@ export function useQuestionnaire() {
   const canProceed = useCallback((step: number): boolean => {
     const { data } = state;
     switch (step) {
-      case 0:
+      case 0: // Acrobatics type
         return !!data.acrobaticsType;
-      case 1:
+      case 1: // Role
         return !!data.role;
-      case 2:
+      case 2: // Level
         return !!data.level;
-      case 3:
-        return (data.goals?.length ?? 0) > 0;
-      case 4:
+      case 3: // Acro style focus (multi-select)
+        return (data.acroStyleFocus?.length ?? 0) > 0;
+      case 4: // Schedule (training days)
         return !!data.trainingDays;
-      case 5:
-        return true; // Equipment is optional
-      case 6:
-        return true; // Limitations is optional
-      case 7:
+      case 5: // Setup (preset required)
+        return !!data.setupPreset;
+      case 6: // Limitations (optional)
+        return true;
+      case 7: // Email
         return !!data.email && data.email.includes('@') && data.acceptedTerms === true;
       default:
         return false;
@@ -98,8 +99,9 @@ export function useQuestionnaire() {
       data.acrobaticsType &&
       data.role &&
       data.level &&
-      (data.goals?.length ?? 0) > 0 &&
+      (data.acroStyleFocus?.length ?? 0) > 0 &&
       data.trainingDays &&
+      data.setupPreset &&
       data.email &&
       data.email.includes('@') &&
       data.acceptedTerms === true

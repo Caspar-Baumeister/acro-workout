@@ -21,23 +21,78 @@ export const EXPERIENCE_LEVELS = [
   { value: 'advanced', label: 'Advanced', description: 'Experienced practitioner (3+ years)' },
 ] as const;
 
-export const TRAINING_GOALS = [
-  { value: 'strength', label: 'Build Strength' },
-  { value: 'flexibility', label: 'Improve Flexibility' },
-  { value: 'balance', label: 'Better Balance' },
-  { value: 'new-skills', label: 'Learn New Skills' },
-  { value: 'consistency', label: 'Train More Consistently' },
-  { value: 'conditioning', label: 'General Conditioning' },
+/**
+ * Acro style focus - can select multiple
+ * Influences the plan's emphasis on different training modalities
+ */
+export const ACRO_STYLE_OPTIONS = [
+  {
+    value: 'static',
+    label: 'Static Poses',
+    description: 'Holding shapes, balances, controlled transitions',
+    icon: '🧘',
+  },
+  {
+    value: 'dynamic',
+    label: 'Dynamic Moves',
+    description: 'Pops, throws, catches, explosive transitions',
+    icon: '🚀',
+  },
+  {
+    value: 'asymmetric',
+    label: 'Asymmetric / Monos',
+    description: 'One-arm, one-leg, and unilateral skills',
+    icon: '🦩',
+  },
 ] as const;
 
-export const EQUIPMENT_OPTIONS = [
-  { value: 'mat', label: 'Yoga Mat' },
-  { value: 'blocks', label: 'Yoga Blocks' },
-  { value: 'resistance-bands', label: 'Resistance Bands' },
-  { value: 'pull-up-bar', label: 'Pull-Up Bar' },
-  { value: 'gymnastics-rings', label: 'Gymnastics Rings' },
-  { value: 'parallettes', label: 'Parallettes' },
-  { value: 'none', label: 'No Equipment' },
+/**
+ * Setup presets - what equipment/environment the user has access to
+ * Constrains exercise selection in the generated plan
+ */
+export const SETUP_PRESETS = [
+  {
+    value: 'no-equipment',
+    label: 'No equipment / at home',
+    description: 'Bodyweight only, floor space',
+    icon: '🏠',
+  },
+  {
+    value: 'basic-home',
+    label: 'Basic home setup',
+    description: 'Dumbbells, kettlebell, or adjustable weights',
+    icon: '🏋️',
+  },
+  {
+    value: 'calisthenics-park',
+    label: 'Calisthenics park access',
+    description: 'Pull-up bars, dip bars, rings',
+    icon: '🏞️',
+  },
+  {
+    value: 'weighted-calisthenics',
+    label: 'Weighted calisthenics',
+    description: 'Belt + plates for loaded bodyweight',
+    icon: '⚙️',
+  },
+  {
+    value: 'gym-access',
+    label: 'Gym access',
+    description: 'Machines and free weights',
+    icon: '🏢',
+  },
+  {
+    value: 'barbell-available',
+    label: 'Barbell available',
+    description: 'Long bar, squat rack, bench',
+    icon: '🔩',
+  },
+  {
+    value: 'fully-stacked',
+    label: 'Fully stacked gym',
+    description: 'Everything: barbells, machines, cables, rings',
+    icon: '🏆',
+  },
 ] as const;
 
 export const TRAINING_DAYS_OPTIONS = [
@@ -71,9 +126,9 @@ export const QUESTIONNAIRE_STEPS = [
     description: 'How long have you been practicing?',
   },
   {
-    id: 'goals',
-    title: 'Training goals',
-    description: 'What do you want to achieve?',
+    id: 'acro-style',
+    title: 'What kind of acro?',
+    description: 'Select all that apply to your training',
   },
   {
     id: 'schedule',
@@ -81,9 +136,9 @@ export const QUESTIONNAIRE_STEPS = [
     description: 'How often can you train?',
   },
   {
-    id: 'equipment',
-    title: 'Available equipment',
-    description: 'What do you have access to?',
+    id: 'setup',
+    title: 'Your setup',
+    description: 'What equipment do you have access to?',
   },
   {
     id: 'limitations',
