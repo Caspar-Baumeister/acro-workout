@@ -3,34 +3,33 @@
 import Link from 'next/link';
 import { Section, SectionHeader } from '@/components/shared';
 import { FadeIn, StaggerContainer, StaggerItem } from '@/components/shared';
-import { ClipboardList, Sparkles, Mail, Dumbbell, ArrowRight, Shield } from 'lucide-react';
+import { ClipboardList, Sparkles, Mail, Dumbbell, ArrowRight, Shield, RefreshCw } from 'lucide-react';
 import { motion } from 'motion/react';
-import { ImagePlaceholder } from '@/components/shared/image-placeholder';
 
 const steps = [
   {
     number: '01',
     icon: ClipboardList,
     title: 'Share your acro profile',
-    description: 'Tell us your role (base/flyer), experience level, training days, and specific goals.',
+    description: 'Tell us your role (base/flyer), experience level, training days, and acro style.',
   },
   {
     number: '02',
     icon: Sparkles,
     title: 'AI builds your plan',
-    description: 'Our AI applies proven training principles to create a 4-week supplemental program.',
+    description: 'Our AI applies proven training principles to create your personalized program.',
   },
   {
     number: '03',
     icon: Mail,
     title: 'Receive by email',
-    description: 'Get your complete plan with exercises, sets, reps, and progressions—ready to use.',
+    description: 'Get your complete plan with exercises, sets, reps, and progression cues.',
   },
   {
     number: '04',
-    icon: Dumbbell,
-    title: 'Train & progress',
-    description: 'Build strength, mobility, and resilience that directly transfers to your acro practice.',
+    icon: RefreshCw,
+    title: 'Train indefinitely',
+    description: 'Use your evergreen weekly template until your goals or situation changes.',
   },
 ];
 
@@ -93,67 +92,57 @@ export function HowItWorks() {
         ))}
       </StaggerContainer>
 
-      {/* Philosophy connection */}
+      {/* Philosophy connection - without image */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="grid lg:grid-cols-5 gap-8 items-center bg-gradient-to-br from-brand-navy/[0.03] to-brand-coral/[0.03] rounded-3xl p-8 md:p-12"
+        className="bg-gradient-to-br from-brand-navy/[0.03] to-brand-coral/[0.03] rounded-3xl p-8 md:p-12"
       >
-        {/* Image */}
-        <div className="lg:col-span-2">
-          <ImagePlaceholder
-            aspectRatio="video"
-            label="Training in action"
-            className="rounded-2xl"
-          />
-        </div>
-
-        {/* Content */}
-        <div className="lg:col-span-3">
+        <div className="max-w-4xl mx-auto text-center mb-10">
           <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
             Built on proven principles
           </h3>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground text-lg">
             Your plan isn&apos;t randomly generated. It&apos;s based on years of experience training acro 
             and understanding what actually helps acrobats progress safely.
           </p>
+        </div>
 
-          <div className="grid sm:grid-cols-3 gap-4 mb-8">
-            {philosophyPoints.map((point, i) => (
-              <motion.div
-                key={point.title}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex flex-col gap-2"
-              >
-                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-coral/10 text-brand-coral">
-                  <point.icon className="h-5 w-5" />
-                </div>
-                <h4 className="font-semibold text-foreground">{point.title}</h4>
-                <p className="text-sm text-muted-foreground">{point.description}</p>
-              </motion.div>
-            ))}
-          </div>
+        <div className="grid sm:grid-cols-3 gap-6 mb-10">
+          {philosophyPoints.map((point, i) => (
+            <motion.div
+              key={point.title}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="text-center p-6 rounded-2xl bg-background/50"
+            >
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-coral/10 text-brand-coral mb-4">
+                <point.icon className="h-6 w-6" />
+              </div>
+              <h4 className="font-semibold text-foreground mb-2">{point.title}</h4>
+              <p className="text-sm text-muted-foreground">{point.description}</p>
+            </motion.div>
+          ))}
+        </div>
 
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/questionnaire"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all"
-            >
-              Create My Plan
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="#philosophy"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-navy/20 text-brand-navy font-medium hover:bg-brand-navy/5 transition-all"
-            >
-              Read our philosophy
-            </Link>
-          </div>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link
+            href="/questionnaire"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all"
+          >
+            Create My Plan
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="#philosophy"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-brand-navy/20 text-brand-navy font-medium hover:bg-brand-navy/5 transition-all"
+          >
+            Read our philosophy
+          </Link>
         </div>
       </motion.div>
     </Section>

@@ -4,6 +4,7 @@ import { GoogleGenerativeAI, SchemaType, type Schema } from '@google/generative-
 import { trainingPlanSchema, type TrainingPlanOutput } from '@/lib/validation/training-plan';
 import type { QuestionnaireInput, SetupPreset, AcroStyleOption } from '@/lib/validation/questionnaire';
 import { formatPhilosophyForPrompt } from '@/content/training-philosophy';
+import { getPreferredExercisesTextBlock } from '@/lib/exercises';
 
 /**
  * Gemini API service module
@@ -43,8 +44,8 @@ const responseSchema: Schema = {
       items: {
         type: SchemaType.OBJECT,
         properties: {
-          week: { type: SchemaType.NUMBER },
-          theme: { type: SchemaType.STRING, description: 'Weekly focus theme (e.g., "Foundation & Prehab", "Building Strength", "Power Development", "Integration & Testing")' },
+          week: { type: SchemaType.NUMBER, description: 'Always 1 for evergreen plan' },
+          theme: { type: SchemaType.STRING, description: 'Overall weekly theme (e.g., "Balanced Acro Support", "Strength & Mobility for Acro")' },
           sessions: {
             type: SchemaType.ARRAY,
             items: {
@@ -351,10 +352,23 @@ function buildPrompt(data: QuestionnaireInput): string {
   
   // Inject the training philosophy
   const philosophy = formatPhilosophyForPrompt();
+  
+  // Get preferred exercises from library
+  const preferredExercises = getPreferredExercisesTextBlock({
+    role: data.role,
+    discipline: data.acrobaticsType,
+    acroStyleFocus: data.acroStyleFocus,
+    level: data.level,
+    setupPreset: data.setupPreset,
+  });
 
   return `You are an expert partner acrobatics strength & conditioning coach creating a SUPPLEMENTAL training program.
 
 ${philosophy}
+
+---
+
+${preferredExercises}
 
 ---
 
@@ -388,12 +402,13 @@ ${roleEmphasis}
 
 ## OUTPUT REQUIREMENTS
 
-Create a **4-week supplemental training program** with these specifications:
+Create an **EVERGREEN weekly training template** that the user can repeat indefinitely:
 
 ### Structure
-- ${data.trainingDays} sessions per week
+- ${data.trainingDays} distinct sessions per week (labeled Session A, B, C, etc.)
 - Each session: 45-60 minutes total
-- Clear progression from Week 1 → Week 4
+- Sessions should be **repeatable weekly** — no week-to-week periodization
+- Design for long-term use until the user's goals or situation changes
 
 ### Session Components (REQUIRED in every session)
 1. **Warmup** (8-12 min): Joint prep, activation, movement prep specific to session focus
@@ -407,12 +422,13 @@ For EVERY exercise, include:
 - Tempo when relevant (e.g., "3-1-2 tempo" = 3 sec down, 1 sec pause, 2 sec up)
 - Rest periods for main lifts (e.g., "90s rest")
 - **WHY IT MATTERS**: Brief note connecting to acro performance
+- **PROGRESSION CUE**: How to know when to increase difficulty (e.g., "add weight when you can complete all reps with good form")
 
-### Weekly Progression Themes
-- Week 1: Foundation & Movement Quality (lighter loads, perfect form)
-- Week 2: Building Volume (moderate intensity, technique reinforcement)
-- Week 3: Intensity Phase (${data.acroStyleFocus.includes('dynamic') ? 'heavier loads, power development' : 'heavier loads, longer holds'})
-- Week 4: Integration & Testing (peak performance, skill transfer)
+### Session Distribution
+Design sessions to cover different focuses across the week:
+- Balance strength, mobility, and prehab across all sessions
+- Each session should have a primary focus but touch on all elements
+- Avoid redundancy — sessions should complement each other
 
 ### MUST INCLUDE for ${data.role.toUpperCase()}
 ${data.role === 'base' ? `
@@ -443,15 +459,17 @@ ${data.acroStyleFocus.includes('asymmetric') ? '- Unilateral strength and stabil
 Include 5-8 specific safety notes covering:
 - Prehab priorities for their role
 - Warning signs to watch for
-- When to reduce intensity
+- When to reduce intensity or take a deload week
+- How to balance this plan with acro practice
 - Recovery recommendations
 
 ### Progression Rules Requirements
-Include 4-6 clear progression guidelines covering:
-- How to progress week-to-week
-- When to increase load/difficulty
-- How to integrate with acro practice schedule
-- Long-term progression beyond 4 weeks
+Include 4-6 clear guidelines for SELF-DIRECTED PROGRESSION:
+- How to know when to increase weight/difficulty for each exercise type
+- Signs that you're ready to progress (e.g., "when all reps feel controlled")
+- When to take a deload week (e.g., every 4-6 weeks or when feeling fatigued)
+- How to adjust if acro training is particularly intense that week
+- When to request a new plan (e.g., "if your role/equipment/goals change significantly")
 
 ---
 

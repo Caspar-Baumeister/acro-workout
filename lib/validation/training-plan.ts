@@ -26,7 +26,7 @@ export const sessionSchema = z.object({
 });
 
 export const weekPlanSchema = z.object({
-  week: z.number(),
+  week: z.number(), // Always 1 for evergreen plan
   theme: z.string(),
   sessions: z.array(sessionSchema),
 });

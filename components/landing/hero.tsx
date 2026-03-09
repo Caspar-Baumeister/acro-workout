@@ -1,50 +1,24 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Play } from 'lucide-react';
-import { HeroImagePlaceholder } from '@/components/shared/image-placeholder';
+import { ArrowRight, Sparkles, ChevronDown } from 'lucide-react';
 
 export function Hero() {
   return (
     <section className="relative min-h-[100vh] flex flex-col items-center justify-center overflow-hidden px-4 py-20">
-      {/* Hero background image placeholder */}
-      <HeroImagePlaceholder />
-
-      {/* Alternative animated background (shows through placeholder) */}
-      <div className="pointer-events-none absolute inset-0 -z-20">
-        {/* Main gradient orbs */}
-        <motion.div
-          className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/3 rounded-full bg-gradient-to-br from-brand-peach via-brand-coral/30 to-transparent blur-3xl opacity-60"
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.6, 0.8, 0.6],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+      {/* Hero background image */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/images/hero_bg.jpg"
+          alt="Partner acrobatics in action"
+          fill
+          priority
+          className="object-cover"
         />
-        <motion.div
-          className="absolute bottom-0 right-0 h-[600px] w-[600px] translate-x-1/4 translate-y-1/4 rounded-full bg-gradient-to-tl from-brand-orange/20 via-brand-peach/30 to-transparent blur-3xl"
-          animate={{
-            scale: [1, 1.15, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        {/* Subtle grid pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.015]" 
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-            backgroundSize: '40px 40px',
-          }}
-        />
+        {/* Gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />
       </div>
 
       <div className="mx-auto max-w-5xl text-center">
@@ -110,7 +84,6 @@ export function Hero() {
             href="#philosophy"
             className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-brand-navy/20 bg-white/80 px-6 text-brand-navy font-medium backdrop-blur-sm transition-all hover:bg-white hover:border-brand-navy/30"
           >
-            <Play className="h-4 w-4" />
             Learn our approach
           </Link>
         </motion.div>
@@ -164,13 +137,7 @@ export function Hero() {
           className="flex flex-col items-center gap-2 text-muted-foreground/50"
         >
           <span className="text-xs uppercase tracking-widest">Discover</span>
-          <div className="h-8 w-5 rounded-full border-2 border-current p-1">
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="h-2 w-1 rounded-full bg-current mx-auto"
-            />
-          </div>
+          <ChevronDown className="h-5 w-5" />
         </motion.div>
       </motion.div>
     </section>

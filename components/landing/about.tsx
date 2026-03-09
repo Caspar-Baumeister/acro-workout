@@ -1,13 +1,20 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
-import { ImagePlaceholder } from '@/components/shared/image-placeholder';
-import { Heart, Award, Users, Calendar } from 'lucide-react';
+import { Heart, Users, Calendar } from 'lucide-react';
 
 const stats = [
   { icon: Calendar, value: '7+', label: 'Years of acro practice' },
   { icon: Users, value: '100+', label: 'Training partners' },
   { icon: Heart, value: '∞', label: 'Passion for movement' },
+];
+
+const galleryImages = [
+  { src: '/images/gallery-training.jpg', alt: 'Training session' },
+  { src: '/images/gallery-partner.jpg', alt: 'Partner work' },
+  { src: '/images/gallery-mobility.jpg', alt: 'Mobility flow' },
+  { src: '/images/gallery-community.jpg', alt: 'Community jam' },
 ];
 
 export function About() {
@@ -29,24 +36,28 @@ export function About() {
             className="relative"
           >
             {/* Main image */}
-            <ImagePlaceholder
-              aspectRatio="portrait"
-              label="Founder/team photo"
-              className="max-w-md mx-auto lg:mx-0"
-            />
+            <div className="relative aspect-[3/4] max-w-md mx-auto lg:mx-0 rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="/images/about-founder.jpeg"
+                alt="Founder practicing acrobatics"
+                fill
+                className="object-cover"
+              />
+            </div>
             
-            {/* Floating accent images */}
+            {/* Floating accent image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="absolute -bottom-6 -right-6 w-32 h-32 md:w-40 md:h-40"
+              className="absolute -bottom-6 -right-6 w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden shadow-2xl border-4 border-background"
             >
-              <ImagePlaceholder
-                aspectRatio="square"
-                label="Acro moment"
-                className="shadow-2xl"
+              <Image
+                src="/images/about-accent.jpg"
+                alt="Acro moment"
+                fill
+                className="object-cover"
               />
             </motion.div>
           </motion.div>
@@ -141,23 +152,20 @@ export function About() {
           transition={{ duration: 0.6 }}
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
-          {[
-            'Training session',
-            'Partner work',
-            'Mobility flow',
-            'Community jam',
-          ].map((label, i) => (
+          {galleryImages.map((image, i) => (
             <motion.div
-              key={label}
+              key={image.alt}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="relative aspect-square rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 shadow-lg"
             >
-              <ImagePlaceholder
-                aspectRatio="square"
-                label={label}
-                className="hover:scale-[1.02] transition-transform duration-300"
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                className="object-cover"
               />
             </motion.div>
           ))}

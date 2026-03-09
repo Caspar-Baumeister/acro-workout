@@ -172,7 +172,7 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
 
     // 7. Send plan via Nodemailer (Strato SMTP)
     console.log('[API] Sending email to:', questionnaire.email);
-    const emailResult = await sendPlanEmail(questionnaire.email, plan);
+    const emailResult = await sendPlanEmail(questionnaire.email, plan, questionnaire);
 
     // 8. Save submission to Firestore (don't block on failure)
     const submissionId = await saveSubmission({

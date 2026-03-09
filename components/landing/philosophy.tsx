@@ -1,8 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { trainingPhilosophy } from '@/content/training-philosophy';
-import { ImagePlaceholder } from '@/components/shared/image-placeholder';
 import { 
   Dumbbell, 
   Wind, 
@@ -65,11 +65,13 @@ export function Philosophy() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="relative aspect-square max-w-lg mx-auto lg:mx-0 rounded-2xl overflow-hidden shadow-2xl"
           >
-            <ImagePlaceholder
-              aspectRatio="square"
-              label="Acro training photo"
-              className="max-w-lg mx-auto lg:mx-0"
+            <Image
+              src="/images/philosophy-training.jpg"
+              alt="Supplemental training for acrobatics"
+              fill
+              className="object-cover"
             />
           </motion.div>
 
