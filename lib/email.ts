@@ -253,11 +253,19 @@ function generateExerciseOverview(
     plan: TrainingPlanOutput,
     userRole: 'base' | 'flyer' | 'both'
 ): string {
-    // Extract all exercise names from the plan
     const exerciseNames = extractExerciseNamesFromPlan(plan);
-
-    // Match to library
     const { found, notFound } = matchPlanExercisesToLibrary(exerciseNames);
+
+    const renderExerciseCard = (data: { name: string; description: string; tags: string; roleNote?: string }) => `
+      <div style="background: #fafafa; border-left: 3px solid #e65100; padding: 12px 16px; margin-bottom: 12px; border-radius: 0 6px 6px 0;">
+        <div style="margin-bottom: 4px;">
+          <strong style="color: #333; font-size: 15px;">${data.name}</strong>
+          ${data.roleNote ? `<span style="background: #fff3e0; color: #e65100; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-left: 8px;">${data.roleNote}</span>` : ''}
+        </div>
+        <p style="margin: 0 0 6px 0; color: #555; font-size: 14px; line-height: 1.5;">${data.description}</p>
+        <span style="color: #888; font-size: 12px;">${data.tags}</span>
+      </div>
+    `;
 
     let html = `
     <div style="margin-bottom: 32px;">
@@ -267,25 +275,19 @@ function generateExerciseOverview(
       <p style="font-size: 14px; color: #666; margin-bottom: 20px;">
         Here's why each exercise is in your plan and what to focus on:
       </p>
-      <div style="font-size: 14px; line-height: 1.8;">
   `;
 
-    // Add exercises from library with full explanations
     for (const { name, exercise } of found) {
-        const explanation = generateExerciseExplanation(name, exercise, userRole);
-        html += `<p style="margin-bottom: 12px;">${explanation}</p>`;
+        const data = generateExerciseExplanation(name, exercise, userRole);
+        html += renderExerciseCard(data);
     }
 
-    // Add exercises not in library with generic explanations
     for (const name of notFound) {
-        const explanation = generateExerciseExplanation(name, null, userRole);
-        html += `<p style="margin-bottom: 12px;">${explanation}</p>`;
+        const data = generateExerciseExplanation(name, null, userRole);
+        html += renderExerciseCard(data);
     }
 
-    html += `
-      </div>
-    </div>
-  `;
+    html += '</div>';
 
     return html;
 }
@@ -314,7 +316,7 @@ function generateProgramSplit(plan: TrainingPlanOutput): string {
         const sessionLabel = String.fromCharCode(65 + index); // A, B, C...
         const allExercises = [
             ...session.main.map((e) => e.name),
-            ...session.accessory.map((e) => e.name),
+            ...(session.skill || []).map((e) => e.name),
         ];
 
         html += `
@@ -374,8 +376,8 @@ function generateDetailedSessions(plan: TrainingPlanOutput): string {
         ${session.warmup.length > 0
                 ? `
           <div style="margin-bottom: 12px;">
-            <h5 style="margin: 0 0 8px 0; color: #333; font-size: 14px;">🔥 Warmup</h5>
-            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">${session.warmup.map(exerciseHtml).join('')}</ul>
+            <h5 style="margin: 0 0 4px 0; color: #333; font-size: 14px;">🔥 Warmup</h5>
+            <p style="margin: 0; font-size: 14px; color: #666;">${session.warmup.join(', ')}</p>
           </div>
         `
                 : ''
@@ -391,21 +393,11 @@ function generateDetailedSessions(plan: TrainingPlanOutput): string {
                 : ''
             }
         
-        ${session.accessory.length > 0
-                ? `
-          <div style="margin-bottom: 12px;">
-            <h5 style="margin: 0 0 8px 0; color: #333; font-size: 14px;">🎯 Accessory</h5>
-            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">${session.accessory.map(exerciseHtml).join('')}</ul>
-          </div>
-        `
-                : ''
-            }
-        
-        ${session.cooldown.length > 0
+        ${session.skill && session.skill.length > 0
                 ? `
           <div>
-            <h5 style="margin: 0 0 8px 0; color: #333; font-size: 14px;">🧘 Cooldown</h5>
-            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">${session.cooldown.map(exerciseHtml).join('')}</ul>
+            <h5 style="margin: 0 0 8px 0; color: #333; font-size: 14px;">🎯 Skill Work</h5>
+            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">${session.skill.map(exerciseHtml).join('')}</ul>
           </div>
         `
                 : ''

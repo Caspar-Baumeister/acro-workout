@@ -16,8 +16,8 @@ const steps = [
   {
     number: '02',
     icon: Sparkles,
-    title: 'AI builds your plan',
-    description: 'Our AI applies proven training principles to create your personalized program.',
+    title: 'We create your plan',
+    description: 'Experienced acrobats have trained our system on what actually works for bases and flyers.',
   },
   {
     number: '03',

@@ -19,10 +19,9 @@ export const exerciseSchema = z.object({
 export const sessionSchema = z.object({
   name: z.string(),
   focus: z.string(),
-  warmup: z.array(exerciseSchema),
+  warmup: z.array(z.string()), // Body parts to warm up (e.g., "wrists", "shoulders")
   main: z.array(exerciseSchema),
-  accessory: z.array(exerciseSchema),
-  cooldown: z.array(exerciseSchema),
+  skill: z.array(exerciseSchema), // Skill-specific exercises for acro
 });
 
 export const weekPlanSchema = z.object({

@@ -56,7 +56,7 @@ export interface SubmissionRecord {
   emailHash?: string;
   questionnaire: QuestionnaireInput;
   plan: TrainingPlanOutput | null;
-  emailSendStatus: 'pending' | 'sent' | 'failed';
+  emailSendStatus: 'pending' | 'sent' | 'failed' | 'rate_limited';
   errorMessage?: string;
 }
 
@@ -68,19 +68,23 @@ export async function saveSubmission(data: {
   email: string;
   questionnaire: QuestionnaireInput;
   plan: TrainingPlanOutput | null;
-  emailSendStatus: 'pending' | 'sent' | 'failed';
+  emailSendStatus: 'pending' | 'sent' | 'failed' | 'rate_limited';
   errorMessage?: string;
 }): Promise<string | null> {
   try {
     const firestore = getDb();
-    const record: SubmissionRecord = {
+    const record: Omit<SubmissionRecord, 'errorMessage'> & { errorMessage?: string } = {
       createdAt: new Date(),
       email: data.email,
       questionnaire: data.questionnaire,
       plan: data.plan,
       emailSendStatus: data.emailSendStatus,
-      errorMessage: data.errorMessage,
     };
+
+    // Only include errorMessage if it has a value (Firestore doesn't accept undefined)
+    if (data.errorMessage) {
+      record.errorMessage = data.errorMessage;
+    }
 
     const docRef = await firestore.collection(SUBMISSIONS_COLLECTION).add(record);
     console.log('[Firebase Admin] Saved submission:', docRef.id);
@@ -117,6 +121,7 @@ export async function updateSubmissionStatus(
 /**
  * Check rate limit by email (simple throttle)
  * Returns true if request should be allowed, false if rate limited
+ * Only counts actual plan requests (excludes rate_limited attempts)
  */
 export async function checkRateLimit(
   email: string,
@@ -133,7 +138,11 @@ export async function checkRateLimit(
       .where('createdAt', '>=', windowStart)
       .get();
 
-    const count = recentSubmissions.size;
+    // Only count actual plan requests, not rate_limited attempts
+    const actualRequests = recentSubmissions.docs.filter(
+      (doc) => doc.data().emailSendStatus !== 'rate_limited'
+    );
+    const count = actualRequests.length;
     const allowed = count < maxRequests;
     const remaining = Math.max(0, maxRequests - count);
 

@@ -85,12 +85,13 @@ function errorResponse(
  *
  * Server-side endpoint for training plan generation and delivery.
  * Flow:
- * 1. Rate limit check (IP + email based)
- * 2. Request validation (Zod)
- * 3. Generate plan (Gemini)
- * 4. Send email (Nodemailer/Strato SMTP)
- * 5. Persist submission (Firestore)
- * 6. Return response
+ * 1. Request size check
+ * 2. Parse & validate request (Zod)
+ * 3. Rate limit checks (IP + email based) - saves entry even if rate limited
+ * 4. Generate plan (Gemini)
+ * 5. Send email (Nodemailer/Strato SMTP)
+ * 6. Persist submission (Firestore)
+ * 7. Return response
  */
 export async function POST(request: Request): Promise<NextResponse<ApiResponse>> {
   const startTime = Date.now();
@@ -103,18 +104,7 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
       return errorResponse('PAYLOAD_TOO_LARGE', 'Request payload too large', 413);
     }
 
-    // 2. IP-based rate limiting (fast, in-memory)
-    const clientIp = await getClientIp();
-    if (!checkIpRateLimit(clientIp)) {
-      console.warn('[API] IP rate limited:', clientIp);
-      return errorResponse(
-        'RATE_LIMITED',
-        'Too many requests. Please wait a moment before trying again.',
-        429
-      );
-    }
-
-    // 3. Parse request body
+    // 2. Parse request body (needed early to get email for tracking)
     let body: unknown;
     try {
       body = await request.json();
@@ -122,7 +112,7 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
       return errorResponse('INVALID_JSON', 'Invalid JSON in request body', 400);
     }
 
-    // 4. Validate input with Zod
+    // 3. Validate input with Zod
     const parseResult = generatePlanRequestSchema.safeParse(body);
     if (!parseResult.success) {
       const flatErrors = parseResult.error.flatten();
@@ -137,10 +127,37 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
 
     const { questionnaire } = parseResult.data;
 
+    // 4. IP-based rate limiting (fast, in-memory)
+    const clientIp = await getClientIp();
+    if (!checkIpRateLimit(clientIp)) {
+      console.warn('[API] IP rate limited:', clientIp);
+      // Save IP rate-limited attempt for tracking
+      await saveSubmission({
+        email: questionnaire.email,
+        questionnaire,
+        plan: null,
+        emailSendStatus: 'rate_limited',
+        errorMessage: `IP rate limited: ${clientIp}`,
+      });
+      return errorResponse(
+        'RATE_LIMITED',
+        'Too many requests. Please wait a moment before trying again.',
+        429
+      );
+    }
+
     // 5. Email-based rate limiting (Firestore, more thorough)
     const rateLimitResult = await checkRateLimit(questionnaire.email);
     if (!rateLimitResult.allowed) {
       console.warn('[API] Email rate limited:', questionnaire.email);
+      // Save rate-limited attempt for tracking
+      await saveSubmission({
+        email: questionnaire.email,
+        questionnaire,
+        plan: null,
+        emailSendStatus: 'rate_limited',
+        errorMessage: 'Email rate limited - too many requests',
+      });
       return errorResponse(
         'RATE_LIMITED',
         'You have already requested plans recently. Please check your email or try again later.',
@@ -148,7 +165,7 @@ export async function POST(request: Request): Promise<NextResponse<ApiResponse>>
       );
     }
 
-    // 6. Generate training plan via Gemini
+    // 6. Generate training plan via Gemini (all rate limit checks passed)
     console.log('[API] Generating plan for:', questionnaire.email);
     let plan;
     try {

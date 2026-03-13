@@ -30,7 +30,7 @@ export function Hero() {
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-brand-coral/30 bg-white/80 px-4 py-2 text-sm font-medium text-brand-navy shadow-lg shadow-brand-coral/5 backdrop-blur-sm"
         >
           <Sparkles className="h-4 w-4 text-brand-orange" />
-          <span>AI-powered supplemental training for acrobats</span>
+          <span>Supplemental training designed by acrobats</span>
         </motion.div>
 
         {/* Main headline */}

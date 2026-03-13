@@ -55,17 +55,8 @@ const responseSchema: Schema = {
                 focus: { type: SchemaType.STRING, description: 'Primary focus and how it supports acro' },
                 warmup: {
                   type: SchemaType.ARRAY,
-                  items: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                      name: { type: SchemaType.STRING },
-                      sets: { type: SchemaType.STRING, nullable: true },
-                      reps: { type: SchemaType.STRING, nullable: true },
-                      duration: { type: SchemaType.STRING, nullable: true },
-                      notes: { type: SchemaType.STRING, nullable: true, description: 'Include tempo, rest, or why this matters for acro' },
-                    },
-                    required: ['name'],
-                  },
+                  items: { type: SchemaType.STRING },
+                  description: 'Body parts to warm up (e.g., "wrists", "shoulders", "hips", "spine")',
                 },
                 main: {
                   type: SchemaType.ARRAY,
@@ -81,7 +72,7 @@ const responseSchema: Schema = {
                     required: ['name'],
                   },
                 },
-                accessory: {
+                skill: {
                   type: SchemaType.ARRAY,
                   items: {
                     type: SchemaType.OBJECT,
@@ -90,27 +81,14 @@ const responseSchema: Schema = {
                       sets: { type: SchemaType.STRING, nullable: true },
                       reps: { type: SchemaType.STRING, nullable: true },
                       duration: { type: SchemaType.STRING, nullable: true },
-                      notes: { type: SchemaType.STRING, nullable: true },
+                      notes: { type: SchemaType.STRING, nullable: true, description: 'Include tempo, rest, or why this matters for acro' },
                     },
                     required: ['name'],
                   },
-                },
-                cooldown: {
-                  type: SchemaType.ARRAY,
-                  items: {
-                    type: SchemaType.OBJECT,
-                    properties: {
-                      name: { type: SchemaType.STRING },
-                      sets: { type: SchemaType.STRING, nullable: true },
-                      reps: { type: SchemaType.STRING, nullable: true },
-                      duration: { type: SchemaType.STRING, nullable: true },
-                      notes: { type: SchemaType.STRING, nullable: true },
-                    },
-                    required: ['name'],
-                  },
+                  description: 'Skill-specific exercises for acro (2-3 exercises)',
                 },
               },
-              required: ['name', 'focus', 'warmup', 'main', 'accessory', 'cooldown'],
+              required: ['name', 'focus', 'warmup', 'main', 'skill'],
             },
           },
         },
@@ -406,15 +384,16 @@ Create an **EVERGREEN weekly training template** that the user can repeat indefi
 
 ### Structure
 - ${data.trainingDays} distinct sessions per week (labeled Session A, B, C, etc.)
-- Each session: 45-60 minutes total
+- Each session: 30-45 minutes total (focused and efficient)
 - Sessions should be **repeatable weekly** — no week-to-week periodization
 - Design for long-term use until the user's goals or situation changes
 
 ### Session Components (REQUIRED in every session)
-1. **Warmup** (8-12 min): Joint prep, activation, movement prep specific to session focus
-2. **Main Work** (20-25 min): Primary strength${data.acroStyleFocus.includes('dynamic') ? '/power' : ''} exercises with clear prescription
-3. **Accessory** (10-15 min): Supporting exercises + PREHAB work (wrists, shoulders, core)
-4. **Cooldown** (5-8 min): Targeted mobility for the session's focus areas
+1. **Warmup**: List 3-5 body parts to warm up (e.g., "wrists", "shoulders", "hips") — NO exercises, just body part names
+2. **Main Work**: EXACTLY 2 muscle-building compound exercises with clear prescription (sets, reps, tempo, rest)
+3. **Skill Work**: EXACTLY 2-3 skill-specific exercises for acro — mobility drills, balance work, body tension, prehab
+
+IMPORTANT: Keep the plan SHORT and FOCUSED. Each session should have only 4-5 total exercises (2 main + 2-3 skill).
 
 ### Exercise Prescription Format
 For EVERY exercise, include:

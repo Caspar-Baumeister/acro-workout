@@ -287,14 +287,14 @@ The following exercises are curated for partner acrobatics training. **Strongly 
 
 /**
  * Extract all unique exercise names from a training plan (for deduplication)
+ * Note: warmup is now body parts (strings), not exercises
  */
 export function extractExerciseNamesFromPlan(plan: {
   weeklyPlan: Array<{
     sessions: Array<{
-      warmup: Array<{ name: string }>;
+      warmup: string[];
       main: Array<{ name: string }>;
-      accessory: Array<{ name: string }>;
-      cooldown: Array<{ name: string }>;
+      skill?: Array<{ name: string }>;
     }>;
   }>;
 }): string[] {
@@ -302,7 +302,7 @@ export function extractExerciseNamesFromPlan(plan: {
 
   for (const week of plan.weeklyPlan) {
     for (const session of week.sessions) {
-      for (const ex of [...session.warmup, ...session.main, ...session.accessory, ...session.cooldown]) {
+      for (const ex of [...session.main, ...(session.skill || [])]) {
         names.add(ex.name);
       }
     }
@@ -357,41 +357,34 @@ export function matchPlanExercisesToLibrary(exerciseNames: string[]): {
 }
 
 /**
- * Generate exercise explanation for email
+ * Generate exercise explanation for email (returns HTML)
  */
 export function generateExerciseExplanation(
   name: string,
   exercise: Exercise | null,
   userRole: 'base' | 'flyer' | 'both'
-): string {
+): { name: string; description: string; tags: string; roleNote?: string } {
   if (exercise) {
-    // Use library data with role-specific addition
-    const purposeStr = exercise.purposeTags.slice(0, 3).join(', ');
-    let explanation = `**${name}** — ${exercise.shortDescription}`;
+    const tags = exercise.purposeTags.slice(0, 3).join(', ');
+    let roleNote: string | undefined;
 
-    // Add role-specific note if relevant
     if (userRole === 'base' && exercise.roles.base && !exercise.roles.flyer) {
-      explanation += ' *Essential for bases.*';
+      roleNote = 'Essential for bases';
     } else if (userRole === 'flyer' && exercise.roles.flyer && !exercise.roles.base) {
-      explanation += ' *Key exercise for flyers.*';
+      roleNote = 'Key for flyers';
     }
 
-    // Add safety cue if available
-    if (exercise.coachingNotes && exercise.coachingNotes.length > 0) {
-      const safetyCue = exercise.coachingNotes.find(
-        (note) =>
-          note.toLowerCase().includes('stop') ||
-          note.toLowerCase().includes('pain') ||
-          note.toLowerCase().includes('careful')
-      );
-      if (safetyCue) {
-        explanation += ` ⚠️ ${safetyCue}`;
-      }
-    }
-
-    return `${explanation} (${purposeStr})`;
+    return {
+      name,
+      description: exercise.shortDescription,
+      tags,
+      roleNote,
+    };
   }
 
-  // Generic explanation for exercises not in library
-  return `**${name}** — A supporting exercise for your training. Focus on controlled movement and proper form.`;
+  return {
+    name,
+    description: 'A supporting exercise for your training. Focus on controlled movement and proper form.',
+    tags: 'general',
+  };
 }
